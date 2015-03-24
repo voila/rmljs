@@ -1,0 +1,109 @@
+type box =
+    { left: float;
+      right: float;
+      top: float;
+      bot: float; }
+;;
+
+let box =
+  { left = 0.; right = 400.;
+    bot = 0.; top = 400.; }
+;;
+
+
+type state =
+    { pos: (float * float, float * float) event;
+      speed: (float * float, float * float) event;
+      radius: float;
+      color: string; }
+;;
+
+signal draw default [] gather (fun x y -> x :: y) ;;
+
+
+let process move state =
+  loop
+    (* emit the position *)
+    emit draw state;
+
+    (* compute the new position *)
+    let pre_vx, pre_vy = last ?state.speed in
+    let pre_x, pre_y = last ?state.pos in
+    let vx =
+      if box.left < pre_x && pre_x < box.right then pre_vx
+      else -. pre_vx
+    in
+    let vy =
+      if box.bot < pre_y && pre_y < box.top then pre_vy
+      else -. pre_vy
+    in
+    let x, y = (pre_x +. vx, pre_y +. vy) in
+
+    (* update the state *)
+    emit state.speed (vx, vy);
+    emit state.pos (x, y);
+    pause
+  end
+;;
+
+
+let color_of_int n =
+  match n mod 7 with
+  | 0 -> "grey"
+  | 1 -> "blue"
+  | 2 -> "lime"
+  | 3 -> "red"
+  | 4 -> "pink"
+  | 5 -> "black"
+  | 6 -> "magenta"
+  | _ -> "black"
+;;
+
+
+let random_speed k =
+  let alpha = Random.float 7. in
+  (k *. cos alpha, k *. sin alpha)
+;;
+
+
+let new_state () =
+  signal pos
+    default ((box.right -. box.left) /. 2., (box.top -. box.bot) /. 2.)
+    gather (fun x _ -> x)
+  in
+  signal speed default random_speed 2. gather (fun x _ -> x) in
+  let color = color_of_int (Random.int 7) in
+  { pos = pos; speed = speed; radius = 20.; color = color; }
+;;
+
+
+
+let process window =
+  loop
+    await draw (all) in
+    Graph.clear_graph box.left box.bot
+      (box.right -. box.left) (box.top -. box.bot);
+    List.iter
+      (fun state ->
+        let x, y = last ?state.pos in
+        Graph.fill_circle x y state.radius state.color)
+      all
+  end
+;;
+
+
+let process start = 
+(*   Graph.open_graph (box.right -. box.left) (box.top -. box.bot); *)
+  run window ||
+  run (move (new_state ())) ||
+  run (move (new_state ())) ||
+  run (move (new_state ())) 
+;;
+
+
+(* let _ =  *)
+(*     run start *)
+(* ;; *)
+    
+
+

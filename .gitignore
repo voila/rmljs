@@ -1,3 +1,5 @@
+.DS_Store
+*.rzi
 *.annot
 *.cmo
 *.cma
@@ -7,3 +9,6 @@
 *.cmx
 *.cmxs
 *.cmxa
+*.opt
+*.native
+*.byte
