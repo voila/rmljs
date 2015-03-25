@@ -93,17 +93,12 @@ let process window =
 
 
 let process start = 
-(*   Graph.open_graph (box.right -. box.left) (box.top -. box.bot); *)
   run window ||
   run (move (new_state ())) ||
   run (move (new_state ())) ||
   run (move (new_state ())) 
 ;;
 
-
-(* let _ =  *)
-(*     run start *)
-(* ;; *)
     
 
 
