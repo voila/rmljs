@@ -5,5 +5,5 @@ Examples from the [ReactiveML](http://rml.lri.fr/) distribution, running in a br
 Relies on a [modified version of RML](https://github.com/voila/rml_no_unix) with no Unix dependencies, thanks to [Louis Mandel](https://github.com/mandel).
 
 ### Demos
-* [Moving balls](https://voila.github.io/mooving_ball.html)
+* [Moving balls](https://voila.github.io/moving_ball.html)
 * [Planets](https://voila.github.io/planets.html)
