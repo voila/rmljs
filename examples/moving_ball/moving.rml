@@ -15,7 +15,7 @@ type state =
     { pos: (float * float, float * float) event;
       speed: (float * float, float * float) event;
       radius: float;
-      color: string; }
+      color: Graphics.color; }
 ;;
 
 signal draw default [] gather (fun x y -> x :: y) ;;
@@ -49,14 +49,14 @@ let process move state =
 
 let color_of_int n =
   match n mod 7 with
-  | 0 -> "grey"
-  | 1 -> "blue"
-  | 2 -> "lime"
-  | 3 -> "red"
-  | 4 -> "pink"
-  | 5 -> "black"
-  | 6 -> "magenta"
-  | _ -> "black"
+  | 0 -> Graphics.rgb 220 20 60
+  | 1 -> Graphics.blue
+  | 2 -> Graphics.rgb 34 139 34
+  | 3 -> Graphics.red
+  | 4 -> Graphics.rgb 150 150 150
+  | 5 -> Graphics.black
+  | 6 -> Graphics.magenta
+  | _ -> Graphics.black
 ;;
 
 
@@ -73,7 +73,7 @@ let new_state () =
   in
   signal speed default random_speed 2. gather (fun x _ -> x) in
   let color = color_of_int (Random.int 7) in
-  { pos = pos; speed = speed; radius = 20.; color = color; }
+  { pos = pos; speed = speed; radius = 25.; color = color; }
 ;;
 
 
@@ -81,18 +81,28 @@ let new_state () =
 let process window =
   loop
     await draw (all) in
-    Graph.clear_graph box.left box.bot
-      (box.right -. box.left) (box.top -. box.bot);
+    Graphics.clear_graph();
     List.iter
       (fun state ->
         let x, y = last ?state.pos in
-        Graph.fill_circle x y state.radius state.color)
+        Graphics.set_color state.color;
+        Graphics.fill_circle
+          (int_of_float x) (int_of_float y)
+          (int_of_float state.radius))
       all
   end
 ;;
 
-
 let process start = 
+(*
+  let g =
+    " " ^
+    (string_of_int (int_of_float (box.right -. box.left))) ^
+    "x" ^
+    (string_of_int (int_of_float (box.top -. box.bot)))
+  in               
+    Graphics.open_graph g;   
+*)
   run window ||
   run (move (new_state ())) ||
   run (move (new_state ())) ||

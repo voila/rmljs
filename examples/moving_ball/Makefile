@@ -6,13 +6,10 @@ STDLIB=$(RML_NOUNIX)/stdlib
 
 
 all:
-	ocamlfind ocamlc -package js_of_ocaml -syntax camlp4o -package js_of_ocaml.syntax -linkpkg -c graph.mli
-	ocamlfind ocamlc -package js_of_ocaml -syntax camlp4o -package js_of_ocaml.syntax -linkpkg -g -c graph.ml
-	$(RMLC) -stdlib $(STDLIB) -c graph.mli # => graph.rzi
 	$(RMLC) -stdlib $(STDLIB) moving.rml   # => moving.ml
-	ocamlfind ocamlc -package js_of_ocaml -syntax camlp4o -package js_of_ocaml.syntax -linkpkg -I $(LCODIR) -I $(INTERPRETERDIR) rmllib.cma  -g -c graph.cmo moving.ml
-	ocamlfind ocamlc -package js_of_ocaml -syntax camlp4o -package js_of_ocaml.syntax -linkpkg -I $(LCODIR) -I $(INTERPRETERDIR) rmllib.cma  -o main.byte  graph.cmo moving.cmo main.ml
-	js_of_ocaml --pretty --opt 1 --noinline main.byte
+	ocamlfind ocamlc -package js_of_ocaml -package js_of_ocaml.graphics -syntax camlp4o -package js_of_ocaml.syntax -linkpkg -I $(LCODIR) -I $(INTERPRETERDIR) rmllib.cma  -g -c  moving.ml
+	ocamlfind ocamlc -package js_of_ocaml -package js_of_ocaml.graphics -syntax camlp4o -package js_of_ocaml.syntax -linkpkg -I $(LCODIR) -I $(INTERPRETERDIR) rmllib.cma  -o main.byte  moving.cmo main.ml
+	js_of_ocaml --pretty --opt 1 --noinline graphics.js main.byte
 
 clean:
 	rm *.cmo *.cmi *.rzi
