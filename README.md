@@ -7,3 +7,4 @@ Relies on a [modified version of RML](https://github.com/voila/rml_no_unix) with
 ### Demos
 * [Moving balls](https://voila.github.io/moving_ball.html)
 * [Planets](https://voila.github.io/planets.html)
+* [Primes](https://voila.github.io/primes.html)
